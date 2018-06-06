@@ -75,11 +75,34 @@ list_cmd () {
 get_cmd () {
 	version=$1
 	shift
+
+	# Get latest version if no version is passed 
 	if [ -z $version ]; then
 		echo "Geting latest version from remote"
 		version=$(net_get_latest_version $NODE_LATEST_DIST_URL)
 		echo "Downloading version $version"
+	else
+		# Check if version name was passed 
+		case $version in 
+			latest|LATEST)
+				version=$(net_get_latest_version $NODE_LATEST_DIST_URL)
+				echo "Current latest is $version"
+				;;
+			carbon|CARBON)
+				version=$(net_get_latest_version $NODE_CARBON_DIST_URL)
+				echo "Current carbon is $version"
+				;;
+			boron|BORON)
+				version=$(net_get_latest_version $NODE_BORON_DIST_URL)
+				echo "Current boron is $version"
+				;;
+			argon|ARGON)
+				version=$(net_get_latest_version $NODE_ARGON_DIST_URL)
+				echo "Current argon is $version"
+				;;
+		esac
 	fi
+
 	filename="node-v$version-linux-x64.tar.xz"
 	url="https://nodejs.org/dist/v$version/$filename"	
 	folder="$CONFIG_FOLDER/node-v$version-linux-x64"
