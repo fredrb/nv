@@ -161,13 +161,6 @@ use_cmd () {
 	ln -s $folder $BIN_LINK
 }
 
-init_cmd () {
-	if [ ! -z $HOME/.nversion ]; then
-		local NODE_VERSION=$(cat $HOME/.nversion) 
-		use_cmd $NODE_VERSION
-	fi
-}
-
 command=$1
 shift
 case $command in
@@ -179,9 +172,6 @@ case $command in
 		;;
 	use)
 		use_cmd "$@"
-		;;
-	init)
-		init_cmd "$@"
 		;;
 	*)
 		print_help
