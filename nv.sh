@@ -76,6 +76,14 @@ get_cmd () {
 	version=$1
 	shift
 
+	# Get OS and Arch
+	OS=$(uname -s | awk '{print tolower($0)}')
+	ARCH=$(uname -m)
+
+	if [ $ARCH == "x86_64" ]; then
+		ARCH="x64"
+	fi
+
 	# Get latest version if no version is passed 
 	if [ -z $version ]; then
 		echo "Geting latest version from remote"
@@ -103,10 +111,8 @@ get_cmd () {
 		esac
 	fi
 
-	filename="node-v$version-linux-x64.tar.xz"
-	url="https://nodejs.org/dist/v$version/$filename"	
-	folder="$CONFIG_FOLDER/node-v$version-linux-x64"
-	if [ -d $folder ]; then
+	url="https://nodejs.org/dist/v$version/node-v$version-$OS-$ARCH.tar.xz"
+	if [ -d "$CONFIG_FOLDER/node-v$version" ]; then
 		echo "Version $version already installed"	
 		echo
 		echo "To use this version, you can type \`nv use $version\`"
@@ -117,6 +123,7 @@ get_cmd () {
 		exit 1
 	fi
 	if [ ! -f /tmp/$filename ]; then
+		filename="node-v$version.tar.xz"
 		mkdir -p $CONFIG_FOLDER/logs
 		$wget -O /tmp/$filename $url 2> $CONFIG_FOLDER/logs/wget.log
 		if [ $? != 0 ]; then
