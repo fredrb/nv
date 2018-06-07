@@ -168,6 +168,30 @@ use_cmd () {
 	ln -s $folder $BIN_LINK
 }
 
+print_help () {
+	echo "usage: nv command [options]"
+	echo
+	echo "command:"
+	echo
+	echo "  list [options]:"
+	echo "    prints all installed versions"
+	echo "    options:"
+	echo "      --remote|-r: print available release versions"
+	echo
+	echo "  get <version>:"
+	echo "    downloads and install version number"
+	echo "    (e.g. nv get 10.4.0)" 
+	echo "    version can be either version number or release names (latest|carbon|boron|argon)"
+	echo "    (e.g. nv get latest)" 
+	echo 
+	echo "  use <version>:"
+	echo "    selects version as current node version"
+	echo "    (e.g. nv use 10.4.0)" 
+	echo 
+	echo "  help:"
+	echo "    prints this help text"
+}
+
 command=$1
 shift
 case $command in
@@ -180,7 +204,7 @@ case $command in
 	use)
 		use_cmd "$@"
 		;;
-	*)
+	help|*)
 		print_help
 		;;
 esac
