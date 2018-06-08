@@ -44,4 +44,8 @@ You can use the aliases for releases, such as `latest`, `carbon`, `boron` and `a
 Given an installed version of NodeJS, this command will create the symlink for the selected NodeJS version and installed packages.
 
 
+#### `nv update`
+
+Update `nv` command to newer version. This will download any updates in git repository and, if needed, run a postinstall script.
+
 

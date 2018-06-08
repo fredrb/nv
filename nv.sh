@@ -12,6 +12,8 @@ NODE_ARGON_DIST_URL="https://nodejs.org/dist/latest-argon/"
 REMOTE_URLS=($NODE_LATEST_DIST_URL $NODE_CARBON_DIST_URL $NODE_BORON_DIST_URL $NODE_ARGON_DIST_URL)
 REMOTE_NAME=("latest" "carbon" "boron" "argon")
 
+NV_VERSION="v0.1.0"
+
 wget=$(which wget)
 
 net_get_latest_version () {
@@ -168,6 +170,29 @@ use_cmd () {
 	ln -s $folder $BIN_LINK
 }
 
+update_cmd () {
+	echo "Updating Nove Versioning"
+	repo="https://fredericorb@bitbucket.org/fredericorb/nv.git"
+	git=$(which git)
+	if [ $? != 0 ]; then
+		echo "Could not found git.\nPlease install git before installing Node Versioning"
+		exit 1
+	fi
+	if [ ! -d $CONFIG_FOLDER/.git ]; then
+		echo "Could not find installation folder"
+		echo "Please make sure nv is installed correctly"
+		exit 1
+	fi
+	pushd $CONFIG_FOLDER
+	$git pull origin master
+	popd
+	echo "Node Versioning updated $(nv version)"
+}
+
+version_cmd () {
+	echo $NV_VERSION
+}
+
 print_help () {
 	echo "usage: nv command [options]"
 	echo
@@ -187,6 +212,9 @@ print_help () {
 	echo "  use <version>:"
 	echo "    selects version as current node version"
 	echo "    (e.g. nv use 10.4.0)" 
+	echo
+	echo "  update:"
+	echo "    self update nv command"
 	echo 
 	echo "  help:"
 	echo "    prints this help text"
@@ -203,6 +231,12 @@ case $command in
 		;;
 	use)
 		use_cmd "$@"
+		;;
+	update)
+		update_cmd "$@"
+		;;
+	version|-v|--version)
+		version_cmd "$@"
 		;;
 	help|*)
 		print_help
