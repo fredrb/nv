@@ -4,7 +4,7 @@ This is a lightweight alternative to NVM.
 
 ### Install NV
 ```bash
-wget -qO- https://bitbucket.org/fredericorb/nv/raw/525d6a81a3c8f2ac9cb36b97d632e482ff4b83ff/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/fredrb/nv/master/install.sh | bash
 ```
 
 This will download NV repository into `$HOME/.config/nv` and the following line to your `$HOME/.profile`:
