@@ -1,7 +1,9 @@
 #!/bin/bash
 
 CONFIG_FOLDER=${NV_CONFIG:-$HOME/.config/nv}
+
 BIN_LINK=$CONFIG_FOLDER/current
+NODE_INSTALLATION=$CONFIG_FOLDER/dist
 
 NODE_VERSION_REGEX='s/\([0-9]*\.[0-9]*\.[0-9]\).*/\1/p'
 
@@ -29,7 +31,7 @@ _list_remote () {
   v=0
   for url in ${REMOTE_URLS[@]}; do
     version=$(net_get_latest_version $url)	
-    if [ -d "$CONFIG_FOLDER/node-v$version-linux-x64" ]; then
+    if [ -d "$NODE_INSTALLATION/$version" ]; then
       echo "  [x] $version (${REMOTE_NAME[$v]})"
     else
       echo "  [ ] $version (${REMOTE_NAME[$v]})"
@@ -44,7 +46,7 @@ _list_remote () {
 
 _list_local () {
   echo "Getting installed versions"
-  for i in $(ls $CONFIG_FOLDER | grep node-v | sed 's/node-v//' | sed -n $NODE_VERSION_REGEX); do
+  for i in $(ls $NODE_INSTALLATION); do
     if [ -f $HOME/.nversion ]; then
       selected=$(cat $HOME/.nversion)
     else
@@ -114,8 +116,9 @@ get_cmd () {
     esac
   fi
 
-  url="https://nodejs.org/dist/v$version/node-v$version-$OS-$ARCH.tar.xz"
-  if [ -d "$CONFIG_FOLDER/node-v$version" ]; then
+  filename="node-v$version-$OS-$ARCH.tar.xz"
+  url="https://nodejs.org/dist/v$version/$filename"
+  if [ -d "$NODE_INSTALLATION/$version" ]; then
     echo "Version $version already installed"	
     echo
     echo "To use this version, you can type \`nv use $version\`"
@@ -126,7 +129,6 @@ get_cmd () {
     exit 1
   fi
   if [ ! -f /tmp/$filename ]; then
-    filename="node-v$version.tar.xz"
     mkdir -p $CONFIG_FOLDER/logs
     $wget -O /tmp/$filename $url 2> $CONFIG_FOLDER/logs/wget.log
     if [ $? != 0 ]; then
@@ -135,9 +137,11 @@ get_cmd () {
       exit 1
     fi
   fi
-  tar -xvf /tmp/$filename -C $CONFIG_FOLDER/
+  mkdir -p $NODE_INSTALLATION
+  tar -xvf /tmp/$filename -C $NODE_INSTALLATION
+  mv $NODE_INSTALLATION/node-v$version* $NODE_INSTALLATION/$version
   if [ $? != 0 ]; then
-    echo "\nFailed to extract /tmp/$filename into $CONFIG_FOLDER"
+    echo "\nFailed to extract /tmp/$filename into $target_dir"
     exit 1
   fi
 }
@@ -151,9 +155,9 @@ use_cmd () {
     exit 1
   fi
   echo "Using node $version"
-    folder="$CONFIG_FOLDER/node-v$version-linux-x64/bin"
+    folder="$NODE_INSTALLATION/$version/bin"
   if [ ! -d $folder ]; then
-    echo "Could not find folder $folder\n"
+    echo "Could not find folder $folder"
     echo "Invalid version $version of nodejs"
     echo "Try installing with \`nv get $version\`"
     exit 1
