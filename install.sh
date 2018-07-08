@@ -21,6 +21,7 @@ install () {
   $git clone $GIT_CLONE_FLAGS $NV_REPO $NV_CONFIG
   echo "Setting up bin and current folders"
   mkdir -p $NV_CONFIG/bin
+  mkdir -p $NV_CONFIG/dist
   ln -s $NV_CONFIG/nv.sh $NV_CONFIG/bin/nv
   config_folder="export NV_CONFIG=\"$NV_CONFIG\""
   echo "Adding $config_folder to $NV_SHELL_FILE"
