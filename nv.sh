@@ -1,7 +1,8 @@
 #!/bin/bash
 
-CONFIG_FOLDER=$HOME/.config/nv
+CONFIG_FOLDER=${NV_CONFIG:-$HOME/.config/nv}
 BIN_LINK=$CONFIG_FOLDER/nbin
+
 NODE_VERSION_REGEX='s/\([0-9]*\.[0-9]*\.[0-9]\).*/\1/p'
 
 NODE_LATEST_DIST_URL="https://nodejs.org/dist/latest/"
@@ -171,16 +172,16 @@ use_cmd () {
 }
 
 update_cmd () {
-  echo "Updating Nove Versioning"
-  repo="https://fredericorb@bitbucket.org/fredericorb/nv.git"
+  echo "Updating Node Versioning"
+  repo="https://github.com/fredrb/nv.git"
   git=$(which git)
   if [ $? != 0 ]; then
     echo "Could not found git.\nPlease install git before installing Node Versioning"
     exit 1
   fi
   if [ ! -d $CONFIG_FOLDER/.git ]; then
-    echo "Could not find installation folder"
-    echo "Please make sure nv is installed correctly"
+    echo "\`nv update\` only works if nv config folder was setup as a git repository."
+    echo "If you installed manually, you can pull the newest changes to update nv command"
     exit 1
   fi
   pushd $CONFIG_FOLDER
