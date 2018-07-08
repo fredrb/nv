@@ -15,7 +15,7 @@ NODE_ARGON_DIST_URL="https://nodejs.org/dist/latest-argon/"
 REMOTE_URLS=($NODE_LATEST_DIST_URL $NODE_CARBON_DIST_URL $NODE_BORON_DIST_URL $NODE_ARGON_DIST_URL)
 REMOTE_NAME=("latest" "carbon" "boron" "argon")
 
-NV_VERSION="v0.1.0"
+NV_VERSION="v1.0"
 
 wget=$(which wget)
 
@@ -198,7 +198,7 @@ update_cmd () {
 }
 
 version_cmd () {
-  echo $NV_VERSION
+  echo "$NV_VERSION"
 }
 
 print_help () {
