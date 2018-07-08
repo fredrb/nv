@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONFIG_FOLDER=${NV_CONFIG:-$HOME/.config/nv}
-BIN_LINK=$CONFIG_FOLDER/nbin
+BIN_LINK=$CONFIG_FOLDER/current
 
 NODE_VERSION_REGEX='s/\([0-9]*\.[0-9]*\.[0-9]\).*/\1/p'
 
