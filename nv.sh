@@ -230,6 +230,20 @@ print_help () {
 
 command=$1
 shift
+
+if [ ! -d $NV_CONFIG ]; then
+  echo "Cannot find nv folder: ($NV_CONFIG)"
+  echo "Installation corrupted"
+  exit 1
+fi
+
+if [ ! -d $NODE_INSTALLATION ]; then
+  echo "Cannot find nv dist folder ($NODE_INSTALLATION)"
+  echo "Installation corrupted"
+  exit 1
+fi
+
+
 case $command in
   list)
     list_cmd "$@"
