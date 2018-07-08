@@ -25,7 +25,7 @@ install () {
   config_folder="export NV_CONFIG=\"$NV_CONFIG\""
   echo "Adding $config_folder to $NV_SHELL_FILE"
   echo  $config_folder >> $NV_SHELL_FILE
-  add_path="export PATH=\"\$PATH:$NV_CONFIG/bin:$NV_CONFIG/current\""
+  add_path="export PATH=\"\$NV_CONFIG/bin:$NV_CONFIG/current:$PATH\""
   echo "Adding $add_path to $NV_SHELL_FILE"
   echo  $add_path >> $NV_SHELL_FILE
 }
