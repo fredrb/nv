@@ -46,12 +46,20 @@ _list_remote () {
 
 _list_local () {
   echo "Getting installed versions"
+  node_path=$(which node 2>&-)
+  if [ ! $? = 0 ]; then
+    echo "No installations of node is being used"
+  elif [ "$BIN_LINK/node" != "$node_path" ]; then
+    echo "Node installation is not under nv"
+    echo "Its possible that current installation of node is installed directly on tthe system"
+    echo 
+    echo "Node path found -> $node_path"
+  else 
+    selected=$(node --version 2>&- | sed 's/v//') 
+  fi
+  echo
+  echo "Downloaded versions:"
   for i in $(ls $NODE_INSTALLATION); do
-    if [ -f $HOME/.nversion ]; then
-      selected=$(cat $HOME/.nversion)
-    else
-      selected="0.0"
-    fi
     if [ "$selected" = "$i" ]; then
       echo "  *$i"
     else
@@ -155,19 +163,14 @@ use_cmd () {
     exit 1
   fi
   echo "Using node $version"
-    folder="$NODE_INSTALLATION/$version/bin"
+  folder="$NODE_INSTALLATION/$version/bin"
   if [ ! -d $folder ]; then
     echo "Could not find folder $folder"
     echo "Invalid version $version of nodejs"
     echo "Try installing with \`nv get $version\`"
     exit 1
   else	
-    echo "Node folder set to $folder" 
-    local NODE_VERSION=$version
-    if [ -f $HOME/.nversion ]; then
-      rm $HOME/.nversion
-    fi
-    echo $version >> $HOME/.nversion
+    echo "Using installation in folder $folder" 
   fi
   if [ -d $BIN_LINK ]; then
     rm $BIN_LINK
